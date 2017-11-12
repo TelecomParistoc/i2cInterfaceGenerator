@@ -15,15 +15,16 @@ To compile the generator, simply run:
 
 Then, the syntax is the following:
 
-  ```$ ./xml <interface_xml_file> <spec_file>```
+  ```$ ./xml <config_file>```
 
-with
-  - *interface_xml_file* : the input xml file describing the interface.
-  - *spec_file* : the output file to store the generated markdown spec.
+The *template_config.txt* file provides you a template to show how to write this
+config file. The syntax is simple and follows this pattern: ```name = value```.
+
+**Note:** Don't forget the spaces around the '='.
 
 ## Interface description
 The xml file describing the interface is composed of a main **interface** node
-containing several **register** nodes, each **regsiter** node describing one
+containing several **register** nodes, each **register** node describing one
 "register" to add to the interface.
 The following elements can be specified for each register, as sub-nodes::
   - *name* : a short description of the register.
@@ -40,6 +41,9 @@ The following elements can be specified for each register, as sub-nodes::
   - *gen_code* : boolean indicating whether to generate code for this entry. Set it
     to false if you want to write it yourself.
 
+**Note:** Never leave an empty node. If you don't want to specify this element,
+simply don't put the sub-node.
+
 ## Output
 The generator can build up to three different files:
  - a **spec** file, in markdwon, describing the interface. Useful to keep your
@@ -49,6 +53,3 @@ The generator can build up to three different files:
  - a **c code** file implementing two functions to handle I2C exchanges:
      - ```void i2c_vt_cb(void* param)```
      - ```void i2c_address_match(I2CDriver* i2cp)```
-
-## Configuration
-A config file allows you to select which outputs you want.
