@@ -174,7 +174,7 @@ static void write_sending_element(FILE *file, interface_element_t *entry, int hi
         }
     } else {
         if (high) {
-            fprintf(file, "            value = (saved_%s && 0xFFFF0000U) >> 16U;\n", entry->c_name);
+            fprintf(file, "            value = (saved_%s & 0xFFFF0000U) >> 16U;\n", entry->c_name);
         } else {
             fprintf(file, "            saved_%s = ", entry->c_name);
             if (entry->category[0] != '\0') {
