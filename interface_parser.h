@@ -3,6 +3,7 @@
 
 #include <libxml/parser.h>
 #include <libxml/tree.h>
+#include <stdint.h>
 
 #define NAME_MAX_SIZE 100
 #define TYPE_MAX_SIZE 20
