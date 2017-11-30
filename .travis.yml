@@ -30,7 +30,6 @@ matrix:
 before_install:
     - eval "${MATRIX_EVAL}"
     - sudo ln -s /usr/include/libxml2/libxml /usr/include/libxml
-    - ls /usr/include/libxml
 
 script:
     - make
