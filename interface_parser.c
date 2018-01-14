@@ -111,11 +111,30 @@ static interface_element_t* add_entry(interface_element_t *entry) {
 /* entry = pointer on last filled entry */
 static interface_element_t* process_element(xmlNode *node, interface_element_t *entry) {
     xmlNode *cur_node;
+    static location_t location;
+
     for (cur_node = node; cur_node; cur_node = cur_node->next) {
         if (cur_node->type == XML_ELEMENT_NODE) {
             if (strcmp((const char*)cur_node->name, "register") == 0) {
                 entry = add_entry(entry);
                 process_entry(cur_node->children, entry);
+                entry->location = location;
+            } else if (strcmp((const char*)cur_node->name, "registers") == 0) {
+                if ((cur_node->properties != NULL) && (strcmp((const char*)cur_node->properties->name, "location") == 0)) {
+                    location = LOCATION_END;
+                    if (strcmp((const char*)cur_node->properties->children->content, "flash") == 0) {
+                        location = LOCATION_FLASH;
+                    } else if (strcmp((const char*)cur_node->properties->children->content, "ram") == 0) {
+                        location = LOCATION_RAM;
+                    } else if (strcmp((const char*)cur_node->properties->children->content, "command") == 0) {
+                        location = LOCATION_COMMAND;
+                    }
+
+                    if (location != LOCATION_END) {
+                        entry = process_element(cur_node->children, entry);
+                    }
+
+                }
             } else {
                 entry = process_element(cur_node->children, entry);
             }
