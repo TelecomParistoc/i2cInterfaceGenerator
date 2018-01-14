@@ -1,4 +1,5 @@
 #include "doc_generator.h"
+#include "utils.h"
 
 /******************************************************************************/
 /*                               Defines                                      */
@@ -59,7 +60,7 @@ FILE* init_doc_file(char *file_name) {
     return file;
 }
 
-int write_doc_file(FILE *file, interface_element_t *entry) {
+int write_doc_file(FILE *file, interface_element_t *entry, device_t *device) {
     /* Check input parameters */
     if (file == NULL) {
         return -1;
@@ -70,6 +71,10 @@ int write_doc_file(FILE *file, interface_element_t *entry) {
     while (entry != NULL) {
         write_entry(file, entry);
         entry = entry->next;
+    }
+
+    if (device != NULL) {
+        fprintf(file, "\nDevice address: 0x%02x\n", device->addr);
     }
 
     return 0;

@@ -30,8 +30,12 @@ typedef struct interface_element_s {
     struct interface_element_s *next;
 } interface_element_t;
 
+typedef struct device_s {
+    uint8_t addr;
+} device_t;
+
 extern xmlDoc* init_parsing(char* file_name);
-extern interface_element_t* parse(xmlDoc* doc);
+extern interface_element_t* parse(xmlDoc* doc, device_t *device);
 extern void close_parsing(xmlDoc* doc, interface_element_t* entry);
 
 #endif

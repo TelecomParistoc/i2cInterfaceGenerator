@@ -93,13 +93,17 @@ FILE* init_header_file(char *file_name) {
     return file;
 }
 
-int write_header_file(FILE *file, interface_element_t *entry) {
+int write_header_file(FILE *file, interface_element_t *entry, device_t *device) {
     interface_element_t *cur_entry;
     /* Check input parameters */
     if (file == NULL) {
         return -1;
     } else if (entry == NULL) {
         return -2;
+    }
+
+    if (device) {
+        fprintf(file, "#define DEVICE_ADDR 0x%02XU\n\n", device->addr);
     }
 
     for (location_t location = 0; location < LOCATION_END; location++) {

@@ -25,6 +25,7 @@ int main(int argc, char* argv[]) {
     int gen_header = 0;
     int gen_code = 0;
     char param_name[MAX_VALUE_LENGTH], param_value[MAX_VALUE_LENGTH];
+    device_t device;
 
     if (argc != 2) {
         printf("Wrong number of arguments\n");
@@ -62,23 +63,23 @@ int main(int argc, char* argv[]) {
     }
 
     xmlDoc *doc = init_parsing(xml_input_file_name);
-    interface_element_t *entry = parse(doc);
+    interface_element_t *entry = parse(doc, &device);
 
 if (gen_doc) {
     FILE *doc_file = init_doc_file(output_spec_file_name);
-    write_doc_file(doc_file, entry);
+    write_doc_file(doc_file, entry, &device);
     close_doc_file(doc_file);
 }
 
 if (gen_header) {
     FILE *header_file = init_header_file(output_header_file_name);
-    write_header_file(header_file, entry);
+    write_header_file(header_file, entry, &device);
     close_header_file(header_file);
 }
 
 if (gen_code) {
     FILE *code_file = init_interface_file(output_code_file_name);
-    write_interface_file(code_file, entry);
+    write_interface_file(code_file, entry, &device);
     close_interface_file(code_file);
 }
 

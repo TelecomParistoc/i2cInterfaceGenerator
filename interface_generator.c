@@ -232,7 +232,9 @@ FILE* init_interface_file(char *file_name) {
     return file;
 }
 
-int write_interface_file(FILE *file, interface_element_t *entry) {
+int write_interface_file(FILE *file, interface_element_t *entry, device_t *device) {
+    UNUSED(device);
+
     /* Check input parameters */
     if (file == NULL) {
         return -1;

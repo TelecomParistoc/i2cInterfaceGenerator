@@ -9,6 +9,8 @@ typedef enum modifier_s {
     HIGH
 } modifier_t;
 
+#define UNUSED(x) ((void)x)
+
 extern int is_small(char c);
 
 extern void write_addr(char *category, char *c_name, FILE *file, modifier_t modifier);

@@ -109,7 +109,7 @@ static interface_element_t* add_entry(interface_element_t *entry) {
 }
 
 /* entry = pointer on last filled entry */
-static interface_element_t* process_element(xmlNode *node, interface_element_t *entry) {
+static interface_element_t* process_element(xmlNode *node, interface_element_t *entry, device_t *device) {
     xmlNode *cur_node;
     static location_t location;
 
@@ -131,12 +131,17 @@ static interface_element_t* process_element(xmlNode *node, interface_element_t *
                     }
 
                     if (location != LOCATION_END) {
-                        entry = process_element(cur_node->children, entry);
+                        entry = process_element(cur_node->children, entry, device);
                     }
 
                 }
             } else {
-                entry = process_element(cur_node->children, entry);
+                if ((cur_node->properties != NULL) && (strcmp((const char*)cur_node->properties->name, "device_addr") == 0)) {
+                    if (device != NULL) {
+                        device->addr = get_addr((char*)cur_node->properties->children->content);
+                    }
+                }
+                entry = process_element(cur_node->children, entry, device);
             }
         }
     }
@@ -159,13 +164,13 @@ xmlDoc* init_parsing(char *file_name) {
     return doc;
 }
 
-interface_element_t* parse(xmlDoc* doc) {
+interface_element_t* parse(xmlDoc* doc, device_t *device) {
     xmlNode *root_element;
     interface_element_t entry;
     entry.next = NULL;
 
     root_element = xmlDocGetRootElement(doc);
-    process_element(root_element, &entry);
+    process_element(root_element, &entry, device);
     return entry.next;
 }
 
