@@ -6,6 +6,7 @@
 /******************************************************************************/
 #define HEADER_HEADER "#ifndef I2C_INTERFACE_ADDR_H\n#define I2C_INTERFACE_ADDR_H\n\n"
 #define HEADER_FOOTER "\n#endif /* I2C_INTERFACE_ADDR_H */\n"
+#define LOCATION_HEADER "/************** %s **************/\n"
 
 /******************************************************************************/
 /*                           Static functions                                 */
@@ -38,6 +39,8 @@ static void write_entry(FILE *file, interface_element_t *element) {
         return;
     }
 
+    fprintf(file, "// %s\n", element->name);
+
     if (element->size < 32) {
         write_entry_content(file, element, NORMAL);
     } else {
@@ -45,6 +48,24 @@ static void write_entry(FILE *file, interface_element_t *element) {
         write_entry_content(file, element, HIGH);
     }
 
+    fprintf(file, "\n");
+
+}
+
+static void write_location_header(FILE *file, location_t location) {
+    switch (location) {
+    case LOCATION_FLASH:
+        fprintf(file, LOCATION_HEADER, "FLASH");
+        break;
+    case LOCATION_RAM:
+        fprintf(file, LOCATION_HEADER, "RAM");
+        break;
+    case LOCATION_COMMAND:
+        fprintf(file, LOCATION_HEADER, "COMMAND");
+        break;
+    default:
+        break;
+    }
 }
 
 /******************************************************************************/
@@ -73,6 +94,7 @@ FILE* init_header_file(char *file_name) {
 }
 
 int write_header_file(FILE *file, interface_element_t *entry) {
+    interface_element_t *cur_entry;
     /* Check input parameters */
     if (file == NULL) {
         return -1;
@@ -80,9 +102,16 @@ int write_header_file(FILE *file, interface_element_t *entry) {
         return -2;
     }
 
-    while (entry != NULL) {
-        write_entry(file, entry);
-        entry = entry->next;
+    for (location_t location = 0; location < LOCATION_END; location++) {
+        write_location_header(file, location);
+        cur_entry = entry;
+        while (cur_entry != NULL) {
+            if (cur_entry->location == location) {
+                write_entry(file, cur_entry);
+            }
+
+            cur_entry = cur_entry->next;
+        }
     }
 
     return 0;
