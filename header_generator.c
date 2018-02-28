@@ -95,6 +95,7 @@ FILE* init_header_file(char *file_name) {
 
 int write_header_file(FILE *file, interface_element_t *entry, device_t *device) {
     interface_element_t *cur_entry;
+	location_t location;
     /* Check input parameters */
     if (file == NULL) {
         return -1;
@@ -106,7 +107,7 @@ int write_header_file(FILE *file, interface_element_t *entry, device_t *device) 
         fprintf(file, "#define DEVICE_ADDR 0x%02XU\n\n", device->addr);
     }
 
-    for (location_t location = 0; location < LOCATION_END; location++) {
+    for (location = 0; location < LOCATION_END; location++) {
         write_location_header(file, location);
         cur_entry = entry;
         while (cur_entry != NULL) {

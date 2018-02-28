@@ -1,8 +1,8 @@
 #ifndef PARSER_H
 #define PARSER_H
 
-#include <libxml/parser.h>
-#include <libxml/tree.h>
+#include <libxml2/libxml/parser.h>
+#include <libxml2/libxml/tree.h>
 #include <stdint.h>
 
 #define NAME_MAX_SIZE 100
